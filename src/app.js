@@ -1,6 +1,5 @@
 import express from 'express';
 import { createServer } from 'http';
-import initSocket from './init/socket.js';
 import cookieParser from 'cookie-parser';
 import { config } from './config/config.js';
 import accountRouter from './routers/accounts.js';
@@ -11,9 +10,6 @@ const server = createServer(app);
 
 const PORT = config.server.port;
 const HOST = config.server.host;
-
-// Socket.IO 초기화
-const io = initSocket(server);
 
 // 미들웨어
 app.use(cookieParser());

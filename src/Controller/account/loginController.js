@@ -29,7 +29,7 @@ const loginHandler = async (req, res) => {
     const token = jwt.sign(
       {
         type: 'JWT',
-        uuid: kakaoId,
+        kakaoId: kakaoId,
       },
       config.auth.secretKey,
       {
