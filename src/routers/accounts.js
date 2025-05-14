@@ -1,6 +1,6 @@
 import express from 'express';
-import registerHandler from '../handlers/account/registerHandler.js';
-import loginHandler from '../handlers/account/loginHandler.js';
+import registerHandler from '../Controller/account/registerController.js';
+import loginHandler from '../Controller/account/loginController.js';
 import { authorization } from '../authorization/authorization.js';
 
 const accountRouter = express.Router();
@@ -110,12 +110,10 @@ accountRouter.post('/register', registerHandler);
  */
 accountRouter.post('/login', loginHandler);
 
-accountRouter.get('/test', async (req, res) => {
-  const { token } = req.body;
-  console.log(token);
-  let payload = { token: token };
-  console.log(authorization(payload));
-  res.status(200).json({ message: token });
+accountRouter.get('/test', authorization, async (req, res) => {
+  const { decodedToken } = req;
+  console.log(decodedToken);
+  res.status(200).json({ message: decodedToken });
 });
 
 export default accountRouter;
