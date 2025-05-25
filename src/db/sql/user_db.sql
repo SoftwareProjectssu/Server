@@ -1,0 +1,9 @@
+ -- DROP TABLE Users;
+
+CREATE TABLE IF NOT EXISTS Users (
+  kakaoId     VARCHAR(255) PRIMARY KEY,
+  nickname    VARCHAR(100) NOT NULL,
+  faceType    VARCHAR(100),
+  sex         BOOLEAN,
+  created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
