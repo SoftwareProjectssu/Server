@@ -2,11 +2,15 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { config } from '../../config/config.js';
+import { findUserByKakaoId, insertUser } from '../../db/user/user_db.js';
+import { uploadToS3 } from '../../utils/db/S3/s3uploader.js';
+import { insertPhoto } from '../../db/photo/photo_db.js';
 
 const registerHandler = async (req, res) => {
-  const { accessToken, facetype, sex, photo } = req.body;
+  const { accessToken, nickname, faceType, sex } = req.body;
+  const file = req.file;
 
-  if (!accessToken || !facetype || !sex || !photo) {
+  if (!accessToken || !nickname || !faceType || !sex || !file) {
     return res.status(400).json({ message: '필수 정보가 누락되었습니다.' });
   }
 
@@ -19,24 +23,28 @@ const registerHandler = async (req, res) => {
     });
 
     const kakaoId = kakaoRes.data.id;
-    const nickname = kakaoRes.data.properties?.nickname || 'NoName';
     const uuid = uuidv4();
 
     // DB에서 카카오 ID로 유저 존재 여부 확인
-    const [rows] = await db.query('SELECT * FROM users WHERE kakao_id = ?', [kakaoId]);
+    const rows = await findUserByKakaoId(kakaoId);
 
     if (rows.length > 0) {
       return res.status(400).json({ message: '이미 가입된 카카오 사용자입니다.' });
     }
 
+    // 이미지 S3에 업로드하고 URL 반환
+    //const photo = await uploadToS3(file);
+    const photo = {};
+
+    // S3 URL로 DB에 사진 저장
+    await insertPhoto(photo.photoId, uuid, photo.URL);
+
     // 사용자 정보 DB 저장
-    await db.query(
-      'INSERT INTO users (uuid, kakao_id, nickname, facetype, sex, photo) VALUES (?, ?, ?, ?, ?, ?)',
-      [uuid, kakaoId, nickname, facetype, sex, photo],
-    );
+    const payload = { uuid, kakaoId, nickname, faceType, sex, photoUrl: photo.URL };
+    await insertUser(payload);
 
     // JWT 발급
-    const token = jwt.sign({ kakaoId, uuid }, config.auth.secretKey, {
+    const token = jwt.sign({ uuid }, config.auth.secretKey, {
       expiresIn: '60m',
     });
 
@@ -45,9 +53,9 @@ const registerHandler = async (req, res) => {
       data: {
         uuid,
         nickname,
-        facetype,
+        faceType,
         sex,
-        photo,
+        representPhotoURL: photo.URL,
         token,
       },
     });
