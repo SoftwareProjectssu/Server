@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
 import { config } from '../../config/config.js';
+import { findUserByKakaoId } from '../../db/user/user_db.js';
 
 const loginHandler = async (req, res) => {
   const { accessToken } = req.body;
@@ -11,7 +12,7 @@ const loginHandler = async (req, res) => {
 
   try {
     // Kakao 사용자 정보 요청
-    /*const kakaoRes = await axios.get('https://kapi.kakao.com/v2/user/me', {
+    const kakaoRes = await axios.get('https://kapi.kakao.com/v2/user/me', {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -19,32 +20,32 @@ const loginHandler = async (req, res) => {
 
     const kakaoUser = kakaoRes.data;
     const kakaoId = kakaoUser.id;
-    const nickname = kakaoUser.properties?.nickname;
-*/
-    // 사용자 존재 여부 확인 → 없으면 회원가입 처리
-    // 예시: DB에서 kakaoId로 사용자 조회 또는 생성
-    // const user = await findOrCreateUser(kakaoId, nickname);
-    const kakaoId = accessToken;
-    // JWT 발급
-    const token = jwt.sign(
-      {
-        type: 'JWT',
-        kakaoId: kakaoId,
-      },
-      config.auth.secretKey,
-      {
-        expiresIn: '60m',
-      },
-    );
 
-    console.log('카카오 로그인 성공:', kakaoId);
+    // 사용자 존재 여부 확인
+    if (!kakaoUser) {
+      return res.status(401).json({ message: '카카오 유저가 존재하지 않음' });
+    }
+
+    // 사용자 회원가입 여부 확인
+    const rows = await findUserByKakaoId(kakaoId);
+    if (rows.length < 1) {
+      return res.status(401).json({ message: '회원가입 필요' });
+    }
+
+    // JWT 발급
+    const uuid = rows[0].userId;
+    const token = jwt.sign({ uuid }, config.auth.secretKey, {
+      expiresIn: '60m',
+    });
+
+    console.log('카카오 로그인 성공 uuid:', uuid);
     res.setHeader('authorization', `Bearer ${token}`);
 
     return res.status(200).json({
       message: '카카오 로그인 성공',
       data: {
         kakaoId,
-        // nickname,
+        nickname: rows[0].nickname,
         token,
       },
     });
