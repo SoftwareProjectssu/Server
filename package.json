@@ -10,12 +10,14 @@
     "migrate": "node src/db/migration/createSchemas.js"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.817.0",
     "axios": "^1.9.0",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.0",
     "mysql2": "^3.14.1",
     "path": "^0.12.7",
     "swagger-jsdoc": "^6.2.8",
