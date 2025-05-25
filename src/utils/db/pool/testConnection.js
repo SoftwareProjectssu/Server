@@ -1,4 +1,4 @@
-import pools from '../../db/database.js';
+import pools from '../../../db/database.js';
 
 const testDbConnection = async (pool, dbName) => {
   try {
