@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import { config } from './config/config.js';
 import accountRouter from './routers/accounts.js';
 import { swaggerUi, specs } from './swagger/swagger.js';
+import initServer from './init/index.js';
 
 const app = express();
 const server = createServer(app);
@@ -20,8 +21,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // 라우터 설정
-
 app.use('/account', accountRouter);
+
+// init(DB 연동)
+await initServer();
 
 // 서버 시작
 server.listen(PORT, () => {
