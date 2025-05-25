@@ -32,11 +32,10 @@ const registerHandler = async (req, res) => {
       return res.status(400).json({ message: '이미 가입된 카카오 사용자입니다.' });
     }
 
-    // 이미지 S3에 업로드하고 URL 반환
-    //const photo = await uploadToS3(file);
-    const photo = {};
+    // 이미지 S3에 업로드하고 URL, photoId 반환
+    const photo = await uploadToS3(file);
 
-    // S3 URL로 DB에 사진 저장
+    // DB에 사진 정보 저장
     await insertPhoto(photo.photoId, uuid, photo.URL);
 
     // 사용자 정보 DB 저장

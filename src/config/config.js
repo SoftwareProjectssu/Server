@@ -7,6 +7,10 @@ import {
   DB1_PASSWORD,
   DB1_HOST,
   DB1_PORT,
+  S3_BUCKETNAME,
+  S3_REGION,
+  S3_ACCESSKEY,
+  S3_SECRETKEY,
 } from '../constants/env.js';
 
 export const config = {
@@ -24,6 +28,12 @@ export const config = {
       password: DB1_PASSWORD,
       host: DB1_HOST,
       port: DB1_PORT,
+    },
+    S3: {
+      bucketName: S3_BUCKETNAME,
+      region: S3_REGION,
+      accessKeyId: S3_ACCESSKEY,
+      secretAccessKey: S3_SECRETKEY,
     },
   },
 };

@@ -3,23 +3,23 @@ import { config } from '../../../config/config.js';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 
+const AWS_S3 = config.databases.S3;
+
 const s3 = new S3Client({
-  /*
-  region: config.aws.region,
+  region: AWS_S3.region,
   credentials: {
-    accessKeyId: config.aws.accessKeyId,
-    secretAccessKey: config.aws.secretAccessKey,
-  },*/
+    accessKeyId: AWS_S3.accessKeyId,
+    secretAccessKey: AWS_S3.secretAccessKey,
+  },
 });
 
 export const uploadToS3 = async (file) => {
-  /*
   const ext = path.extname(file.originalname);
   const uuid = uuidv4();
   const key = `uploads/${uuid}${ext}`;
 
   const command = new PutObjectCommand({
-    Bucket: config.aws.bucketName,
+    Bucket: AWS_S3.bucketName,
     Key: key,
     Body: file.buffer,
     ContentType: file.mimetype,
@@ -28,7 +28,7 @@ export const uploadToS3 = async (file) => {
   await s3.send(command);
 
   return {
-    URL: `https://${config.aws.bucketName}.s3.${config.aws.region}.amazonaws.com/${key}`,
+    URL: `https://${AWS_S3.bucketName}.s3.${AWS_S3.region}.amazondatabases.S3.com/${key}`,
     photoId: uuid,
-  };*/
+  };
 };

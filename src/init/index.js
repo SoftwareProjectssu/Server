@@ -1,4 +1,4 @@
-import { testAllConnections } from '../utils/db/testConnection.js';
+import { testAllConnections } from '../utils/db/pool/testConnection.js';
 
 const initServer = async () => {
   try {
