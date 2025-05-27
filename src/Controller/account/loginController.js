@@ -12,14 +12,16 @@ const loginHandler = async (req, res) => {
 
   try {
     // Kakao 사용자 정보 요청
-    const kakaoRes = await axios.get('https://kapi.kakao.com/v2/user/me', {
+    /*const kakaoRes = await axios.get('https://kapi.kakao.com/v2/user/me', {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
 
     const kakaoUser = kakaoRes.data;
-    const kakaoId = kakaoUser.id;
+    const kakaoId = kakaoUser.id;*/
+    const kakaoUser = 'test';
+    const kakaoId = 'testId2';
 
     // 사용자 존재 여부 확인
     if (!kakaoUser) {

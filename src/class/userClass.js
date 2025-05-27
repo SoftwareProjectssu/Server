@@ -1,7 +1,7 @@
 class User {
-  constructor(uuid, socket, payload) {
+  constructor(uuid, token) {
     this.uuid = uuid;
-    this.socket = socket;
+    this.token = token;
   }
 }
 

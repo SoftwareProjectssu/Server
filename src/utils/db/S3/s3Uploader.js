@@ -28,7 +28,7 @@ export const uploadToS3 = async (file) => {
   await s3.send(command);
 
   return {
-    URL: `https://${AWS_S3.bucketName}.s3.${AWS_S3.region}.amazondatabases.S3.com/${key}`,
+    URL: `https://${AWS_S3.bucketName}.s3.${AWS_S3.region}.amazonaws.com/${key}`,
     photoId: uuid,
   };
 };

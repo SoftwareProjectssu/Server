@@ -5,6 +5,7 @@ import { config } from './config/config.js';
 import accountRouter from './routers/accounts.js';
 import { swaggerUi, specs } from './swagger/swagger.js';
 import initServer from './init/index.js';
+import cors from 'cors';
 
 const app = express();
 const server = createServer(app);
@@ -16,6 +17,12 @@ const HOST = config.server.host;
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(
+  cors({
+    origin: '*', // 또는 '*' (테스트용)
+    exposedHeaders: ['authorization'], // ← 이게 중요!
+  }),
+);
 
 // swagger 설정
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));

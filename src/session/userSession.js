@@ -1,8 +1,8 @@
 import User from '../class/userClass.js';
 import { userSessions } from './session.js';
 
-export const addUser = (uuid, socket, payload) => {
-  const user = new User(uuid, socket, payload);
+export const addUser = (uuid, token) => {
+  const user = new User(uuid, token);
   userSessions.push(user);
   return user;
 };
@@ -25,6 +25,6 @@ export const clearSession = () => {
   userSessions.splice(0, userSessions.length);
 };
 
-export const getUuidBySocket = (socket) => {
-  return userSessions.find((user) => user.socket === socket);
+export const getUuidByToken = (token) => {
+  return userSessions.find((user) => user.token === token);
 };
