@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { config } from '../../config/config.js';
 import { findUserByKakaoId, insertUser } from '../../db/user/user_db.js';
-import { uploadToS3 } from '../../utils/db/S3/s3uploader.js';
+import { uploadToS3 } from '../../utils/db/S3/s3Uploader.js';
 import { insertPhoto } from '../../db/photo/photo_db.js';
 
 const registerHandler = async (req, res) => {
