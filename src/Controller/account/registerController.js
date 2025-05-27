@@ -10,13 +10,13 @@ const registerHandler = async (req, res) => {
   const { accessToken, nickname, faceType, sex } = req.body;
   const file = req.file;
 
-  if (!accessToken || !nickname || !faceType || !sex || !file) {
+  if (!accessToken || !nickname || !faceType || !sex) {
     return res.status(400).json({ message: '필수 정보가 누락되었습니다.' });
   }
 
   try {
     // Kakao API에서 사용자 정보 요청
-    const kakaoRes = await axios.get('https://kapi.kakao.com/v2/user/me', {
+    kakaoRes = await axios.get('https://kapi.kakao.com/v2/user/me', {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -24,6 +24,8 @@ const registerHandler = async (req, res) => {
 
     const kakaoId = kakaoRes.data.id;
     const uuid = uuidv4();
+    // const kakaoId = nickname;
+    // const uuid = uuidv4();
 
     // DB에서 카카오 ID로 유저 존재 여부 확인
     const rows = await findUserByKakaoId(kakaoId);
@@ -33,19 +35,24 @@ const registerHandler = async (req, res) => {
     }
 
     // 이미지 S3에 업로드하고 URL, photoId 반환
-    const photo = await uploadToS3(file);
+    let photo;
+    if (file) {
+      photo = await uploadToS3(file);
+    } else photo = { photoId: -1, URL: -1 };
+
+    // 사용자 정보 DB 저장
+    const payload = { uuid, kakaoId, nickname, faceType, sex, photoId: photo.photoId };
+    await insertUser(payload);
 
     // DB에 사진 정보 저장
     await insertPhoto(photo.photoId, uuid, photo.URL);
-
-    // 사용자 정보 DB 저장
-    const payload = { uuid, kakaoId, nickname, faceType, sex, photoUrl: photo.URL };
-    await insertUser(payload);
 
     // JWT 발급
     const token = jwt.sign({ uuid }, config.auth.secretKey, {
       expiresIn: '60m',
     });
+
+    console.log('카카오 회원가입 성공 userId:' + uuid);
 
     return res.status(201).json({
       message: '카카오 회원가입 성공',

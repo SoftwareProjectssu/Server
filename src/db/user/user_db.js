@@ -13,6 +13,6 @@ export const insertUser = async (payload) => {
     payload.nickname,
     payload.faceType,
     payload.sex,
-    payload.photoUrl,
+    payload.photoId,
   ]);
 };
