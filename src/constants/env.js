@@ -17,3 +17,6 @@ export const S3_BUCKETNAME = process.env.S3_BUCKET_NAME;
 export const S3_REGION = process.env.S3_REGION;
 export const S3_ACCESSKEY = process.env.S3_ACCESS_KEY_ID;
 export const S3_SECRETKEY = process.env.S3_SECRET_ACCESS_KEY;
+
+export const AI_PORT = process.env.AI_SERVER_PORT;
+export const AI_HOST = process.env.AI_SERVER_HOST;

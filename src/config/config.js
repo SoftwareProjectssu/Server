@@ -11,6 +11,8 @@ import {
   S3_REGION,
   S3_ACCESSKEY,
   S3_SECRETKEY,
+  AI_PORT,
+  AI_HOST,
 } from '../constants/env.js';
 
 export const config = {
@@ -35,5 +37,9 @@ export const config = {
       accessKeyId: S3_ACCESSKEY,
       secretAccessKey: S3_SECRETKEY,
     },
+  },
+  AI: {
+    PORT: AI_PORT,
+    HOST: AI_HOST,
   },
 };

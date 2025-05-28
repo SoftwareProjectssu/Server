@@ -16,3 +16,8 @@ export const insertUser = async (payload) => {
     payload.photoId,
   ]);
 };
+
+export const findUserByUserId = async (userId) => {
+  const [rows] = await pools.hAIr.query(SQL_QUERIES.FIND_USER_BY_USERID, [userId]);
+  return rows;
+};
