@@ -16,12 +16,12 @@ const registerHandler = async (req, res) => {
 
   try {
     // Kakao API에서 사용자 정보 요청
-    kakaoRes = await axios.get('https://kapi.kakao.com/v2/user/me', {
+    const kakaoRes = await axios.get('https://kapi.kakao.com/v2/user/me', {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-
+    console.log(kakaoRes);
     const kakaoId = kakaoRes.data.id;
     const uuid = uuidv4();
     // const kakaoId = nickname;
@@ -41,7 +41,9 @@ const registerHandler = async (req, res) => {
     } else photo = { photoId: -1, URL: -1 };
 
     // 사용자 정보 DB 저장
-    const payload = { uuid, kakaoId, nickname, faceType, sex, photoId: photo.photoId };
+    let sexBool = 0;
+    if (sex === '남자') sexBool = 1;
+    const payload = { uuid, kakaoId, nickname, faceType, sexBool, photoId: photo.photoId };
     await insertUser(payload);
 
     // DB에 사진 정보 저장
