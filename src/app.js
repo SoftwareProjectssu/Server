@@ -6,6 +6,7 @@ import accountRouter from './routers/accounts.js';
 import { swaggerUi, specs } from './swagger/swagger.js';
 import initServer from './init/index.js';
 import cors from 'cors';
+import photoRouter from './routers/photo.js';
 
 const app = express();
 const server = createServer(app);
@@ -29,6 +30,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // 라우터 설정
 app.use('/account', accountRouter);
+app.use('/photo', photoRouter);
 
 // init(DB 연동)
 await initServer();

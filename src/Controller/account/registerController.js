@@ -43,7 +43,7 @@ const registerHandler = async (req, res) => {
     // 사용자 정보 DB 저장
     let sexBool = 0;
     if (sex === '남자') sexBool = 1;
-    const payload = { uuid, kakaoId, nickname, faceType, sexBool, photoId: photo.photoId };
+    const payload = { uuid, kakaoId, nickname, faceType, sex: sexBool, photoId: photo.photoId };
     await insertUser(payload);
 
     // DB에 사진 정보 저장
@@ -54,8 +54,9 @@ const registerHandler = async (req, res) => {
       expiresIn: '60m',
     });
 
-    console.log('카카오 회원가입 성공 userId:' + uuid);
+    console.log('카카오 회원가입 성공 userId:' + uuid, nickname, faceType, sex, photo.URL, token);
 
+    res.setHeader('authorization', `Bearer ${token}`);
     return res.status(201).json({
       message: '카카오 회원가입 성공',
       data: {
