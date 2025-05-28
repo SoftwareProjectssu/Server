@@ -16,7 +16,14 @@ export const authorization = async (req, res, next) => {
     /*
       decodedToken으로 사용자 정보 DB에서 불러오기
       req에 정보 저장해서 next로 넘겨주기
+      db 쿼리문으로 연동
+      const user = await getUserByUUID(decodedToken.uuid);
+    if (!user) {
+      return res.status(401).json({ errorMessage: '해당 사용자가 존재하지 않습니다.' });
+    }
     */
+    const uuid = decodedToken.uuid;
+    req.uuid = uuid;
 
     next();
   } catch (error) {

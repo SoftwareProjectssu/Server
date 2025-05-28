@@ -1,5 +1,6 @@
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
+import { config } from '../config/config.js';
 
 const options = {
   definition: {
@@ -11,7 +12,21 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:3532',
+        url: `http://${config.server.host}:${config.server.port}`,
+      },
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
       },
     ],
   },
