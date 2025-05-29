@@ -5,6 +5,6 @@ export const photoDyeHandler = async (req, res) => {
     const { photoID } = req;
     findByPhotoId(photoID);
   } catch (err) {
-    return res.stauts(500).json({ message: '서버 오류에요' });
+    return res.status(500).json({ message: '서버 오류에요' });
   }
 };

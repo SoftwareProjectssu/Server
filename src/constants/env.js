@@ -20,3 +20,4 @@ export const S3_SECRETKEY = process.env.S3_SECRET_ACCESS_KEY;
 
 export const AI_PORT = process.env.AI_SERVER_PORT;
 export const AI_HOST = process.env.AI_SERVER_HOST;
+export const AI2_URL = process.env.AI2_URL;

@@ -1,16 +1,16 @@
 import axios from 'axios';
 import { config } from '../../config/config.js';
 
-export const sendToAIServer = async ({ userId, imageUrl, gender }) => {
+export const sendToAIServer1 = async (userId, photoURL, gender) => {
   try {
-    console.log(`http://${config.AI.HOST}:${config.AI.PORT}/infer`);
-    console.log('전송: ', userId, imageUrl, typeof gender);
+    console.log(`AI Server1: 'http://${config.AI.HOST}:${config.AI.PORT}/infer'`);
+    console.log('전송 data: ', userId, photoURL, gender);
     const response = await axios.post(
       `http://${config.AI.HOST}:${config.AI.PORT}/infer`,
       {
-        photoURL: imageUrl,
+        photoURL,
         uId: userId,
-        gender: gender,
+        gender,
       },
       {
         headers: {
@@ -19,10 +19,10 @@ export const sendToAIServer = async ({ userId, imageUrl, gender }) => {
       },
     );
 
-    console.log('AI 서버 응답:', response.data);
+    console.log('AI 서버1 응답:', response.data);
     return response.data;
   } catch (error) {
-    console.error('AI 서버 요청 실패:', error.message);
+    console.error('AI 서버1 요청 실패:', error.message);
     // throw error;
   }
 };

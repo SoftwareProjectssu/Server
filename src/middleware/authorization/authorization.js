@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { config } from '../../config/config.js';
+import { findUserByUserId } from '../../db/user/user_db.js';
 
 export const authorization = async (req, res, next) => {
   try {
@@ -13,18 +14,16 @@ export const authorization = async (req, res, next) => {
     const decodedToken = jwt.verify(token, config.auth.secretKey);
     console.log(`token authorization success\ndecodedToken: ${decodedToken}`);
     req.decodedToken = decodedToken;
-    /*
-      decodedToken으로 사용자 정보 DB에서 불러오기
-      req에 정보 저장해서 next로 넘겨주기
-      db 쿼리문으로 연동
-      const user = await getUserByUUID(decodedToken.uuid);
-    if (!user) {
-      return res.status(401).json({ errorMessage: '해당 사용자가 존재하지 않습니다.' });
-    }
-    */
-    const uuid = decodedToken.uuid;
-    req.uuid = uuid;
 
+    // decodedToken의 사용자 ID가 DB에 있는지 확인
+    const userId = decodedToken.uuid;
+    const [user] = await findUserByUserId(userId);
+    if (!user) {
+      return res.status(400).json({ message: '사용자가 존재하지 않습니다.' });
+    }
+
+    req.uuid = userId;
+    req.user = user;
     next();
   } catch (error) {
     res.clearCookie('authorization');

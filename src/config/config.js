@@ -13,6 +13,7 @@ import {
   S3_SECRETKEY,
   AI_PORT,
   AI_HOST,
+  AI2_URL,
 } from '../constants/env.js';
 
 export const config = {
@@ -41,5 +42,8 @@ export const config = {
   AI: {
     PORT: AI_PORT,
     HOST: AI_HOST,
+  },
+  AI2: {
+    URL: AI2_URL,
   },
 };
