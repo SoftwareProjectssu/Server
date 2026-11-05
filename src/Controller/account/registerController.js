@@ -47,14 +47,13 @@ const registerHandler = async (req, res) => {
     await insertUser(payload);
 
     // DB에 사진 정보 저장
-    await insertPhoto(photo.photoId, uuid, photo.URL);
+    const dbPayload = { photoId: photo.photoId, userId: uuid, photoURL: photo.URL };
+    await insertPhoto(dbPayload);
 
     // JWT 발급
     const token = jwt.sign({ uuid }, config.auth.secretKey, {
       expiresIn: '60m',
     });
-
-    console.log('카카오 회원가입 성공 userId:' + uuid, nickname, faceType, sex, photo.URL, token);
 
     res.setHeader('authorization', `Bearer ${token}`);
     return res.status(201).json({

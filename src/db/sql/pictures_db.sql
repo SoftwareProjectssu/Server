@@ -4,6 +4,10 @@ CREATE TABLE IF NOT EXISTS Photos (
   photoId   CHAR(36) PRIMARY KEY,
   userId      VARCHAR(255) NOT NULL,
   photoURL     VARCHAR(2048) NOT NULL,
+  saved BOOLEAN,
+  recommended BOOLEAN,
+  applied BOOLEAN,
+  dyed BOOLEAN,
   created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   
   FOREIGN KEY (userId) REFERENCES Users(userId)
